@@ -47,7 +47,6 @@ class LLMClassifier(nn.Module):
 
         hidden_states = outputs.logits    # now hidden states (Identity)
 
-        # last non-masked token
         lengths = attention_mask.sum(dim=1)
         token_pos = lengths - 1
         batch_idx = torch.arange(hidden_states.size(0), device=hidden_states.device)

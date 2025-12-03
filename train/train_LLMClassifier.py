@@ -11,12 +11,9 @@ from train.LLMClassifier_collator import PromptCollator
 def compute_metrics(p):
     logits = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
     pred_labels = np.argmax(logits, axis=-1)
-    
     true_labels = p.label_ids
-    
     macro_f1 = f1_score(true_labels, pred_labels, average="macro")
     weighted_f1 = f1_score(true_labels, pred_labels, average="weighted")
-    
     return {
         "macro_f1": macro_f1,
         "weighted_f1": weighted_f1,
@@ -46,7 +43,6 @@ if __name__ == "__main__" :
         
     base_model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
         device_map="auto"
     )
 
