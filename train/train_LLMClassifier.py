@@ -5,7 +5,7 @@ from datasets import load_dataset
 from sklearn.metrics import f1_score
 import numpy as np
 from peft import LoraConfig, get_peft_model
-from models import LLMClassifier
+from models.LLMClassifier import LLMClassifier
 from train.LLMClassifier_collator import PromptCollator
 
 def compute_metrics(p):
