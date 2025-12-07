@@ -56,7 +56,8 @@ if __name__ == "__main__" :
 
     dataset = load_dataset("DFKI/radr_intents")
     train_dataset = dataset["train"]
-    eval_dataset = dataset["test"]
+    eval_dataset = dataset["validation"]
+    test_dataset = dataset["test"]
 
     training_args = TrainingArguments(
         output_dir=output_dir,
@@ -85,4 +86,4 @@ if __name__ == "__main__" :
 
     trainer.train()
 
-    results = trainer.evaluate(eval_dataset)
+    results = trainer.evaluate(test_dataset)

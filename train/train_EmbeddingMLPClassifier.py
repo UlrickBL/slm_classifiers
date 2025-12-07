@@ -37,6 +37,16 @@ class_texts = {
     "confirm": "acknowledge, agree, confirm understanding.",
 }
 
+TASK_DESCRIPTION = """You classify a sentence into one of these classes:
+
+- disconfirm — deny, reject, disagree.
+- order — give a command or instruction.
+- provide_info — give information or a status update.
+- request_info — ask for information.
+- call — call someone on the radio (e.g., “Unit A to Unit B”).
+- response_call — respond to a call (e.g., “Here is Unit B”).
+- other — anything not fitting the above.
+- confirm — acknowledge, agree, confirm understanding."""
 
 if __name__ == "__main__" :
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -55,11 +65,12 @@ if __name__ == "__main__" :
     lora_model = get_peft_model(base_model, lora_config)
 
     model = EmbeddingClassifier(lora_model, NUM_CLASSES, EMBEDDING_SIZE)
-    collator = EmbeddingCollator(tokenizer, max_length=512)
+    collator = EmbeddingCollator(tokenizer, TASK_DESCRIPTION, max_length=512)
 
     dataset = load_dataset("DFKI/radr_intents")
     train_dataset = dataset["train"]
-    eval_dataset = dataset["test"]
+    eval_dataset = dataset["validation"]
+    test_dataset = dataset["test"]
 
     training_args = TrainingArguments(
         output_dir=output_dir,
@@ -88,4 +99,4 @@ if __name__ == "__main__" :
 
     trainer.train()
 
-    results = trainer.evaluate(eval_dataset)
+    results = trainer.evaluate(test_dataset)
